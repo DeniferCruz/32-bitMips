@@ -22,8 +22,8 @@ entity data_path is
     ir_en               : in  std_logic;
     data_en             : in  std_logic;
     write_reg_en        : in  std_logic;
-    alu_op              : in  std_logic_vector (5 downto 0);
-    adress_pc           : out std_logic_vector (8 downto 0);
+    alu_op              : in  std_logic_vector (3 downto 0);
+    adress_pc           : out std_logic_vector (5 downto 0);
     decoded_inst        : out decoded_instruction_type;
     
     flag_z              : out std_logic;
@@ -31,8 +31,8 @@ entity data_path is
     
     mem_write_sel       : in  std_logic;
     alu_a_ind           : in  std_logic;
-    saida_memoria       : in  std_logic_vector (31 downto 0);       -- memory to instruction register and/or data register
-    entrada_memoria     : out std_logic_vector (31 downto 0)        -- ula_out or reg_out to memory
+    saida_memoria       : in  std_logic_vector (15 downto 0);       -- memory to instruction register and/or data register
+    entrada_memoria     : out std_logic_vector (15 downto 0)        -- ula_out or reg_out to memory
     
   );
 end data_path;
@@ -42,10 +42,10 @@ architecture rtl of data_path is
 
     signal data                 : std_logic_vector (15 downto 0);
     signal alu_or_mem_data      : std_logic_vector (15 downto 0);
-    signal instruction          : std_logic_vector (31 downto 0); 
-    signal mem_addr             : std_logic_vector (8  downto 0); 
-    signal program_counter      : std_logic_vector (8  downto 0); 
-    signal out_pc_mux           : std_logic_vector (8  downto 0); 
+    signal instruction          : std_logic_vector (15 downto 0); 
+    signal mem_addr             : std_logic_vector (5  downto 0); 
+    signal program_counter      : std_logic_vector (5  downto 0); 
+    signal out_pc_mux           : std_logic_vector (5  downto 0); 
     signal b_alu                : std_logic_vector (15 downto 0);
     signal dr_to_reg            : std_logic_vector (15 downto 0);
 
@@ -56,51 +56,65 @@ architecture rtl of data_path is
      signal reg2                : std_logic_vector (15 downto 0);
      signal reg3                : std_logic_vector (15 downto 0);
      signal reg4                : std_logic_vector (15 downto 0);
-     signal reg5                : std_logic_vector (15 downto 0);
-     signal reg6                : std_logic_vector (15 downto 0);
-     signal reg7                : std_logic_vector (15 downto 0);
-     signal reg8                : std_logic_vector (15 downto 0);
-     signal reg9                : std_logic_vector (15 downto 0);
-     signal reg10               : std_logic_vector (15 downto 0);
-     signal reg11               : std_logic_vector (15 downto 0);
-     signal reg12               : std_logic_vector (15 downto 0);
-     signal reg13               : std_logic_vector (15 downto 0);
-     signal reg14               : std_logic_vector (15 downto 0);
-     signal reg15               : std_logic_vector (15 downto 0);
-     signal reg16               : std_logic_vector (15 downto 0);
-     signal reg20               : std_logic_vector (15 downto 0);
      
      signal reg_inst_mem        : std_logic_vector (14 downto 0); 
      signal mem_data_reg        : std_logic_vector (15 downto 0);
      signal reg_a_ula           : std_logic_vector (15 downto 0);
      signal reg_b_ula           : std_logic_vector (15 downto 0);
-     signal reg_ula_out         : std_logic_vector (31 downto 0);
+     signal reg_ula_out         : std_logic_vector (15 downto 0);
      
          
     -- target register
       
-    signal reg_dest     : std_logic_vector(4 downto 0);
-    signal reg_dest_duo : std_logic_vector(4 downto 0);
+    signal reg_dest     : std_logic_vector(1 downto 0);
     
     -- Reg A  
-    signal reg_op_a     : std_logic_vector(4 downto 0);
     signal reg_a_alu_out: std_logic_vector(15 downto 0);
     
     -- Reg B  
-    signal reg_op_b     : std_logic_vector(4 downto 0);
     signal reg_b_alu_out: std_logic_vector(15 downto 0);
       
    -- ALU signals
     signal a_operand    : STD_LOGIC_VECTOR (15 downto 0);      
     signal b_operand    : STD_LOGIC_VECTOR (15 downto 0);   
-    signal ula_out      : STD_LOGIC_VECTOR (31 downto 0);
+    signal ula_out      : STD_LOGIC_VECTOR (15 downto 0);
     
     -- FLAGS
     signal zero         : std_logic;
-    signal neg          : std_logic; 
+    signal neg          : std_logic;
+    signal alu_op       : STD_LOGIC_VECTOR (3 downto 0);
+
+    signal saida_mux_pc          : STD_LOGIC_VECTOR (5 downto 0);
+    signal saida_mux_register    : STD_LOGIC_VECTOR (5 downto 0);
       
     begin
     
     -- enter your code here
 
+    saida_mux_pc <= saida_memoria(5 downto 0) WHEN j_Select= '1' ELSE
+              <= program_counter + 1;
+
+    saida_mux_register <= reg_ula_out(5 downto 0) WHEN = '1' ELSE
+              <= program_counter + 1;
+
+    reg_bank : process(clk)
+    begin
+    if (clk'event and clk='1') then
+          if (write_reg_en = '1') then
+              case reg_dest is
+                when "0001" => reg1 <= reg_ula_out;
+                when "0010" => reg2 <= reg_ula_out;
+                when "0011" => reg3 <= reg_ula_out;
+                when "0100" => reg4 <= reg_ula_out;
+                when others  => reg5<= reg_ula_out;
+              end case;
+          else
+              if(rst_n='1') then
+                reg1 <= x"0000";
+                reg2 <= x"0000";
+                reg3 <= x"0000";
+                reg4 <= x"0000";                              
+              end if;    
+          end if;    
+    end if;
 end rtl;
