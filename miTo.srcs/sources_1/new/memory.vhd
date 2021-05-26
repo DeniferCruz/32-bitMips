@@ -15,7 +15,9 @@ entity memory is
 	port(		
         clk                 : in  std_logic;
         escrita             : in  std_logic;
-        rst_n               : in  std_logic;        
+        rst_n               : in  std_logic;
+
+		-- Datapath        
         entrada_memoria     : in  std_logic_vector(15 downto 0);
         endereco_memoria    : in  std_logic_vector(6  downto 0);
         saida_memoria       : out std_logic_vector(15 downto 0)

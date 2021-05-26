@@ -12,34 +12,40 @@ use mito.mito_pkg.all;
 
 entity data_path is
   Port (
+    -- Clock e reset
     clk                 : in  std_logic;
-    rst_n               : in  std_logic;
-    adress_sel          : in  std_logic;
-    jmp_sel             : in  std_logic;
-    alu_mem_sel         : in  std_logic;
-    alu_b_ind           : in  std_logic;
-    pc_en               : in  std_logic;
-    ir_en               : in  std_logic;
-    data_en             : in  std_logic;
-    write_reg_en        : in  std_logic;
-    alu_op              : in  std_logic_vector (3 downto 0);
-    adress_pc           : out std_logic_vector (5 downto 0);
-    decoded_inst        : out decoded_instruction_type;
+    rst_n               : in  std_logic;   -- reset
+
+    -- Memória
+    saida_memoria       : in  std_logic_vector (15 downto 0);
+    entrada_memoria     : out std_logic_vector (15 downto 0);
+    adress_pc           : out std_logic_vector (5 downto 0);   -- saída do pc
+
+    -- Controle de seletores
+    jmp_sel             : in  std_logic;   -- seletor do jump
+    adress_sel          : in  std_logic;   -- seletor do pc
+    alu_mem_sel         : in  std_logic;   -- seletor do ula
+    mem_write_sel       : in  std_logic;   -- seletor da escrita de memória
+    alu_op              : in  std_logic_vector (3 downto 0);    -- seletor da ula
+
+    -- Registradores
+    pc_en               : in  std_logic;    -- habilita registrador de pc
+    ir_en               : in  std_logic;    -- habilita registrador de instrução
+    data_en             : in  std_logic;    -- habilita registrador de dados na memória 
+    write_reg_en        : in  std_logic;    -- escrita nos registradores
+    alu_a_ind           : in  std_logic;    -- registrador a
+    alu_b_ind           : in  std_logic;    -- registrador b
     
+    -- Infos para o controle
+    decoded_inst        : out decoded_instruction_type;
     flag_z              : out std_logic;
     flag_n              : out std_logic;
-    
-    mem_write_sel       : in  std_logic;
-    alu_a_ind           : in  std_logic;
-    saida_memoria       : in  std_logic_vector (15 downto 0);       -- memory to instruction register and/or data register
-    entrada_memoria     : out std_logic_vector (15 downto 0)        -- ula_out or reg_out to memory
-    
   );
 end data_path;
 
 architecture rtl of data_path is
 
-
+    -- sinais que saem de algum lugar
     signal data                 : std_logic_vector (15 downto 0);
     signal alu_or_mem_data      : std_logic_vector (15 downto 0);
     signal instruction          : std_logic_vector (15 downto 0); 
@@ -50,30 +56,25 @@ architecture rtl of data_path is
     signal dr_to_reg            : std_logic_vector (15 downto 0);
     signal pc_in                : std_logic_vector (8 downto 0);
     signal pc_out               : std_logic_vector (8 downto 0);
-
     
-    -- registers
-
+    -- banco de registradores
      signal reg1                : std_logic_vector (15 downto 0);
      signal reg2                : std_logic_vector (15 downto 0);
      signal reg3                : std_logic_vector (15 downto 0);
      signal reg4                : std_logic_vector (15 downto 0);
-     
+    
      signal reg_inst_mem        : std_logic_vector (14 downto 0); 
      signal mem_data_reg        : std_logic_vector (15 downto 0);
-     signal reg_a_ula           : std_logic_vector (15 downto 0);
-     signal reg_b_ula           : std_logic_vector (15 downto 0);
+     signal reg_a_ula           : std_logic_vector (15 downto 0);   -- entrada do registrador a
+     signal reg_b_ula           : std_logic_vector (15 downto 0);   -- entrada do registrador b
      signal reg_ula_out         : std_logic_vector (15 downto 0);
      
          
-    -- target register
-      
+    -- registrador de destino
     signal reg_dest     : std_logic_vector(1 downto 0);
     
-    -- Reg A  
-    signal reg_a_alu_out: std_logic_vector(15 downto 0);
-    
-    -- Reg B  
+    -- Saída dos registradores a e b 
+    signal reg_a_alu_out: std_logic_vector(15 downto 0);  
     signal reg_b_alu_out: std_logic_vector(15 downto 0);
       
    -- ALU signals
@@ -93,11 +94,17 @@ architecture rtl of data_path is
     
     -- enter your code here
 
+    -- mux entrda pc (jump e branch quando 1)
     saida_mux_pc <= saida_memoria(5 downto 0) WHEN j_Select= '1' ELSE
               <= program_counter + 1;
 
-    saida_mux_register <= ula_out(5 downto 0) WHEN = '1' ELSE
-              <= program_counter + 1;
+    -- mux entre pc e mem (load e store quando 1)
+    adress_pc <= saida_memoria(5 downto 0) WHEN out_pc_mux= '1' ELSE
+              <= pc_out;
+
+    -- mux entre saida da ula e banco de regs
+    saida_mux_register <= saida_memoria(5 downto 0) WHEN ula_out= '1' ELSE
+              <= 
 
     PC : process (clk)
       begin
