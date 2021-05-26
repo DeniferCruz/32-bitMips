@@ -48,6 +48,8 @@ architecture rtl of data_path is
     signal out_pc_mux           : std_logic_vector (5  downto 0); 
     signal b_alu                : std_logic_vector (15 downto 0);
     signal dr_to_reg            : std_logic_vector (15 downto 0);
+    signal pc_in                : std_logic_vector (8 downto 0);
+    signal pc_out               : std_logic_vector (8 downto 0);
 
     
     -- registers
@@ -94,27 +96,57 @@ architecture rtl of data_path is
     saida_mux_pc <= saida_memoria(5 downto 0) WHEN j_Select= '1' ELSE
               <= program_counter + 1;
 
-    saida_mux_register <= reg_ula_out(5 downto 0) WHEN = '1' ELSE
+    saida_mux_register <= ula_out(5 downto 0) WHEN = '1' ELSE
               <= program_counter + 1;
+
+    PC : process (clk)
+      begin
+      if (rst_n = '1' AND rising_edge(clk)) then
+          pc_out <= "000000";
+      elsif (pc_enable = '1' AND rising_edge(clk)) then
+          pc_out <= pc_in;
+      end if;
+    end process PC;
+
+    FLAGS : process (clk)
+        begin
+          flag_z <= zero;
+          flag_n <= neg;
+    end process FLAGS;
 
     reg_bank : process(clk)
     begin
-    if (clk'event and clk='1') then
-          if (write_reg_en = '1') then
-              case reg_dest is
-                when "0001" => reg1 <= reg_ula_out;
-                when "0010" => reg2 <= reg_ula_out;
-                when "0011" => reg3 <= reg_ula_out;
-                when "0100" => reg4 <= reg_ula_out;
-                when others  => reg5<= reg_ula_out;
-              end case;
-          else
-              if(rst_n='1') then
-                reg1 <= x"0000";
-                reg2 <= x"0000";
-                reg3 <= x"0000";
-                reg4 <= x"0000";                              
-              end if;    
+      if (clk'event and clk='1') then
+        if (write_reg_en = '1') then
+            case reg_dest is
+              when "0001" => reg1 <= reg_ula_out;
+              when "0010" => reg2 <= reg_ula_out;
+              when "0011" => reg3 <= reg_ula_out;
+              when "0100" => reg4 <= reg_ula_out;
+              when others  => reg5<= reg_ula_out;
+            end case;
+        else
+          if(rst_n='1') then
+            reg1 <= x"0000";
+            reg2 <= x"0000";
+            reg3 <= x"0000";
+            reg4 <= x"0000";                              
           end if;    
-    end if;
+        end if;    
+      end if;
+    end process FLAGS;
+
+    ULA : process (a_operand, b_operand, alu_op)
+    begin
+      case alu_op is 
+
+      when "0001" => ula_out <= a_operand +  b_operand;
+      when "0010" => ula_out <= a_operand OR b_operand;
+      when "1100" => ula_out <= a_operand - b_operand;
+      
+      when others a_operand +  b_operand;
+      end case;
+
+    end process ULA;
+
 end rtl;
