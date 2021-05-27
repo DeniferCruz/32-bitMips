@@ -41,8 +41,8 @@ entity data_path is
     flag_z              : out std_logic;
     flag_n              : out std_logic;
 
-    out_pc_mux_signal   : out std_logic;
-  );
+    out_pc_mux_signal   : out std_logic
+  ); 
 end data_path;
 
 architecture rtl of data_path is
@@ -87,7 +87,6 @@ architecture rtl of data_path is
     -- FLAGS
     signal zero         : std_logic;
     signal neg          : std_logic;
-    signal alu_op       : STD_LOGIC_VECTOR (3 downto 0);
 
     signal saida_mux_pc          : STD_LOGIC_VECTOR (5 downto 0);
     signal saida_mux_register    : STD_LOGIC_VECTOR (5 downto 0);

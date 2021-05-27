@@ -47,6 +47,6 @@ architecture Behavioral of testebench is
     
     -- reset signal
     reset_s		<= '1' after 2 ns,
-		   '0' after 4 ns;	
+		   '0' after 8 ns;	
 
 end Behavioral;

@@ -35,12 +35,13 @@ entity data_path is
     write_reg_en        : in  std_logic;    -- escrita nos registradores
     alu_a_ind           : in  std_logic;    -- registrador a
     alu_b_ind           : in  std_logic;    -- registrador b
+   
     
     -- Infos para o controle
     decoded_inst        : out decoded_instruction_type;
     flag_z              : out std_logic;
-    flag_n              : out std_logic;
-  );
+    flag_n              : out std_logic
+);
 end data_path;
 
 architecture rtl of data_path is
@@ -85,43 +86,42 @@ architecture rtl of data_path is
     -- FLAGS
     signal zero         : std_logic;
     signal neg          : std_logic;
-    signal alu_op       : STD_LOGIC_VECTOR (3 downto 0);
 
     signal saida_mux_pc          : STD_LOGIC_VECTOR (5 downto 0);
     signal saida_mux_register    : STD_LOGIC_VECTOR (5 downto 0);
       
-    begin
+    begin 
     
     -- enter your code here
 
     -- mux entrda pc (jump e branch quando 1)
-    saida_mux_pc <= saida_memoria(5 downto 0) WHEN j_Select= '1' ELSE
-              <= program_counter + 1;
-
+   saida_mux_pc <= saida_memoria(5 downto 0) WHEN jmp_sel= '1' ELSE
+   program_counter + 1; 
+   
     -- mux entre pc e mem (load e store quando 1)
-    adress_pc <= saida_memoria(5 downto 0) WHEN out_pc_mux= '1' ELSE
-              <= pc_out;
+   adress_pc <= saida_memoria (5 downto 0) WHEN jmp_sel= '1' ELSE
+    pc_out(8 downto 0);
 
-    -- mux entre saida da ula e banco de regs
-    saida_mux_register <= saida_memoria(5 downto 0) WHEN ula_out= '1' ELSE
-              <= 
+    -- mux entre saida da ula e memória
+    saida_mux_register <= ula_out when alu_mem_sel  = '1' ELSE 
+    alu_or_mem_data; 
 
     PC : process (clk)
       begin
       if (rst_n = '1' AND rising_edge(clk)) then
           pc_out <= "000000";
-      elsif (pc_enable = '1' AND rising_edge(clk)) then
+      elsif (pc_en = '1' AND rising_edge(clk)) then
           pc_out <= pc_in;
       end if;
     end process PC;
 
     FLAGS : process (clk)
-        begin
+    begin
           flag_z <= zero;
           flag_n <= neg;
     end process FLAGS;
 
-    reg_bank : process(clk)
+    reg_bank : process(clk)  
     begin
       if (clk'event and clk='1') then
         if (write_reg_en = '1') then
@@ -129,8 +129,8 @@ architecture rtl of data_path is
               when "0001" => reg1 <= reg_ula_out;
               when "0010" => reg2 <= reg_ula_out;
               when "0011" => reg3 <= reg_ula_out;
-              when "0100" => reg4 <= reg_ula_out;
-              when others  => reg5<= reg_ula_out;
+              when others => reg4 <= reg_ula_out;
+            
             end case;
         else
           if(rst_n='1') then
@@ -141,7 +141,7 @@ architecture rtl of data_path is
           end if;    
         end if;    
       end if;
-    end process FLAGS;
+    end process reg_bank;
 
     ULA : process (a_operand, b_operand, alu_op)
     begin
@@ -151,9 +151,19 @@ architecture rtl of data_path is
       when "0010" => ula_out <= a_operand OR b_operand;
       when "1100" => ula_out <= a_operand - b_operand;
       
-      when others a_operand +  b_operand;
+      when others => ula_out <= a_operand NAND b_operand;
       end case;
 
     end process ULA;
+    
+    IR : process (clk)
+    begin
+         if (clk'event and clk='1') then
+            if (ir_en = '1') then
+                instruction <= saida_memoria;   
+            end if;
+      end if;
+    end process IR;
+
 
 end rtl;
