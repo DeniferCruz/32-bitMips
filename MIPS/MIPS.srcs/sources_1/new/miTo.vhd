@@ -31,6 +31,7 @@ signal ir_en_s                  : std_logic;
 signal data_en_s                : std_logic;
 signal write_reg_en_s           : std_logic;
 signal jmp_sel_s                : std_logic;
+signal out_pc_mux_signal        : std_logic;
 signal alu_mem_sel_s            : std_logic;
 signal write_mem_en_s           : std_logic;
 signal read_mem_en_s            : std_logic;
@@ -55,6 +56,7 @@ control_unit_i : control_unit
     write_reg_en        => write_reg_en_s,
     decoded_inst        => decoded_instruction_s,
     jmp_sel             => jmp_sel_s,
+    out_pc_mux_signal   => out_pc_mux_signal_s,
     alu_mem_sel         => alu_mem_sel_s,
     write_mem_en        => write_mem_en_s,
     alu_op              => alu_op_s,
@@ -71,6 +73,7 @@ data_path_i : data_path
     adress_sel          => adress_cel_s,
     adress_pc           => adress_pc_s,
     jmp_sel             => jmp_sel_s,
+    out_pc_mux_signal   => out_pc_mux_signal_s,
     alu_mem_sel         => alu_mem_sel_s,
     alu_b_ind           => alu_b_ind_s,
     pc_en               => pc_en_s,

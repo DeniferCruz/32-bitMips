@@ -20,6 +20,7 @@ package mito_pkg is
 		rst_n               : in  std_logic;
 		adress_sel          : in  std_logic;
 		jmp_sel             : in  std_logic;
+		out_pc_mux_signal   : in  std_logic;
 		alu_mem_sel         : in  std_logic;
 		alu_b_ind           : in  std_logic;
 		pc_en               : in  std_logic;
@@ -49,6 +50,7 @@ package mito_pkg is
 		data_en             : out std_logic;
 		write_reg_en        : out std_logic;
 		jmp_sel             : out std_logic;
+		out_pc_mux_signal   : out std_logic;
 		alu_mem_sel         : out std_logic;
 		write_mem_en        : out std_logic;
 		decoded_inst        : in  decoded_instruction_type;

@@ -22,6 +22,7 @@ entity control_unit is
         data_en             : out std_logic;
         write_reg_en        : out std_logic;
         jmp_sel             : out std_logic;
+        out_pc_mux_signal   : out std_logic;
         alu_mem_sel         : out std_logic;
         write_mem_en        : out std_logic;
         mem_write_sel       : out std_logic;

@@ -40,6 +40,8 @@ entity data_path is
     decoded_inst        : out decoded_instruction_type;
     flag_z              : out std_logic;
     flag_n              : out std_logic;
+
+    out_pc_mux_signal   : out std_logic;
   );
 end data_path;
 
@@ -95,16 +97,16 @@ architecture rtl of data_path is
     -- enter your code here
 
     -- mux entrda pc (jump e branch quando 1)
-    saida_mux_pc <= saida_memoria(5 downto 0) WHEN j_Select= '1' ELSE
-              <= program_counter + 1;
+    saida_mux_pc <= saida_memoria(5 downto 0) WHEN jmp_sel = '1' ELSE
+                    program_counter + 1;
 
     -- mux entre pc e mem (load e store quando 1)
-    adress_pc <= saida_memoria(5 downto 0) WHEN out_pc_mux= '1' ELSE
-              <= pc_out;
+    adress_pc <= saida_memoria(5 downto 0) WHEN out_pc_mux_signal = '1' ELSE
+                 pc_out;
 
     -- mux entre saida da ula e banco de regs
-    saida_mux_register <= saida_memoria(5 downto 0) WHEN ula_out= '1' ELSE
-              <= 
+    saida_mux_register <= saida_memoria(5 downto 0) WHEN alu_mem_sel = '1' ELSE
+              
 
     PC : process (clk)
       begin
