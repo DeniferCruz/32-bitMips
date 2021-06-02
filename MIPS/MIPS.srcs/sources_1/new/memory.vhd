@@ -19,7 +19,7 @@ entity memory is
 
 		-- Datapath        
         entrada_memoria     : in  std_logic_vector(15 downto 0);
-        endereco_memoria    : in  std_logic_vector(6  downto 0);
+        endereco_memoria    : in  std_logic_vector(5  downto 0);
         saida_memoria       : out std_logic_vector(15 downto 0)
     );
         
@@ -40,7 +40,7 @@ begin
 	if(rst_n = '1') then
 			--  reset memory when rst_n = 1 
 			 
-			mem(0)    <= "0000000000000000"; 
+			mem(0)    <= "0110100111000000"; 
 			mem(1)    <= "0000000000000000";
 			mem(2)    <= "0000000000000000";
 			mem(3)    <= "0000000000000000";

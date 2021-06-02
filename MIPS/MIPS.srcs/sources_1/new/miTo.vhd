@@ -13,8 +13,8 @@ entity miTo is
   Port (
       rst_n                  : in  std_logic;
       clk                    : in  std_logic;
-      saida_memoria          : in  std_logic_vector (31 downto 0);   -- in data read from memory
-      entrada_memoria        : out std_logic_vector (31 downto 0);   -- out_reg or alu_out to memory 
+      saida_memoria          : in  std_logic_vector (15 downto 0);   -- in data read from memory
+      entrada_memoria        : out std_logic_vector (15 downto 0);   -- out_reg or alu_out to memory 
       write_mem_en           : out std_logic
    );
 end miTo;
@@ -31,14 +31,13 @@ signal ir_en_s                  : std_logic;
 signal data_en_s                : std_logic;
 signal write_reg_en_s           : std_logic;
 signal jmp_sel_s                : std_logic;
-signal out_pc_mux_signal        : std_logic;
 signal alu_mem_sel_s            : std_logic;
 signal write_mem_en_s           : std_logic;
 signal read_mem_en_s            : std_logic;
-signal alu_op_s                 : std_logic_vector (5  downto 0);
-signal saida_memoria_s          : std_logic_vector (31 downto 0);
-signal entrada_memoria_s        : std_logic_vector (31 downto 0);
-signal adress_pc_s              : std_logic_vector (8  downto 0);
+signal alu_op_s                 : std_logic_vector (3  downto 0);
+signal saida_memoria_s          : std_logic_vector (15 downto 0);
+signal entrada_memoria_s        : std_logic_vector (15 downto 0);
+signal adress_pc_s              : std_logic_vector (5  downto 0);
 signal mem_write_sel_s          : std_logic;
 signal alu_a_ind_s              : std_logic;
 
@@ -56,7 +55,6 @@ control_unit_i : control_unit
     write_reg_en        => write_reg_en_s,
     decoded_inst        => decoded_instruction_s,
     jmp_sel             => jmp_sel_s,
-    out_pc_mux_signal   => out_pc_mux_signal_s,
     alu_mem_sel         => alu_mem_sel_s,
     write_mem_en        => write_mem_en_s,
     alu_op              => alu_op_s,
@@ -72,8 +70,6 @@ data_path_i : data_path
     rst_n               => rst_n,
     adress_sel          => adress_cel_s,
     adress_pc           => adress_pc_s,
-    jmp_sel             => jmp_sel_s,
-    out_pc_mux_signal   => out_pc_mux_signal_s,
     alu_mem_sel         => alu_mem_sel_s,
     alu_b_ind           => alu_b_ind_s,
     pc_en               => pc_en_s,
@@ -82,6 +78,7 @@ data_path_i : data_path
     write_reg_en        => write_reg_en_s,
     alu_op              => alu_op_s,
     decoded_inst        => decoded_instruction_s,
+    jmp_sel             => jmp_sel_s,
     flag_z              => flag_z_s,
     flag_n              => flag_n_s,
     saida_memoria       => saida_memoria_s,

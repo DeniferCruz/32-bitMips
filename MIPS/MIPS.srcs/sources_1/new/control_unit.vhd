@@ -22,7 +22,6 @@ entity control_unit is
         data_en             : out std_logic;
         write_reg_en        : out std_logic;
         jmp_sel             : out std_logic;
-        out_pc_mux_signal   : out std_logic;
         alu_mem_sel         : out std_logic;
         write_mem_en        : out std_logic;
         mem_write_sel       : out std_logic;
@@ -46,7 +45,7 @@ begin
     main : process(clk)
     begin
         if (clk'event and clk='1') then
-            if (rst_n = '0') then
+            if (rst_n = '1') then
                 current <= busca_inst;
             else
                 current <= nextstate; 
@@ -63,7 +62,7 @@ begin
     ir_en <= '0';
     write_reg_en <= '0';
     adress_sel <= '0';
-    alu_op <="00";
+    alu_op <="0000";
     write_mem_en <= '0';
 
     
@@ -92,21 +91,25 @@ begin
                     when I_ADD =>
      
                         alu_op <= "0001";
+                        write_reg_en <= '1';
                         nextstate <= add; 
                            
                     when I_OR =>
      
                         alu_op <= "0010";
+                         write_reg_en <= '1';
                         nextstate <= ore; 
                         
                     when I_JMP =>
      
                         jmp_sel <= '1';
+                        pc_en <= '1';
                         nextstate <= jmp;
                         
                    when I_SUB =>
      
-                        alu_op <= "1100";
+                        alu_op <= "0110";
+                         write_reg_en <= '1';
                         nextstate <= sub;
                         
                     when I_BNE =>
@@ -127,7 +130,8 @@ begin
                     
                 when add =>
                     nextstate <= busca_inst;
-                    
+                    write_reg_en <= '1';
+                     pc_en <= '1';
                 when sub =>
                     nextstate <= busca_inst;
                     
@@ -136,6 +140,7 @@ begin
                  
                  when jmp =>
                     nextstate <= busca_inst;
+                     pc_en <= '1';
                     
                  when bne =>
                     nextstate <= busca_inst;    

@@ -20,22 +20,21 @@ package mito_pkg is
 		rst_n               : in  std_logic;
 		adress_sel          : in  std_logic;
 		jmp_sel             : in  std_logic;
-		out_pc_mux_signal   : in  std_logic;
 		alu_mem_sel         : in  std_logic;
 		alu_b_ind           : in  std_logic;
 		pc_en               : in  std_logic;
 		ir_en               : in  std_logic;
 		data_en             : in  std_logic;
 		write_reg_en        : in  std_logic;
-		alu_op              : in  std_logic_vector (5 downto 0);
+		alu_op              : in  std_logic_vector (3 downto 0);
 		decoded_inst        : out decoded_instruction_type;
-		adress_pc           : out std_logic_vector (8 downto 0);
+		adress_pc           : out std_logic_vector (5 downto 0);
 		flag_z              : out std_logic;
 		flag_n              : out std_logic;
 		mem_write_sel       : in  std_logic;
 		alu_a_ind           : in  std_logic;
-		saida_memoria       : in  std_logic_vector (31 downto 0);   
-		entrada_memoria     : out std_logic_vector (31 downto 0) 
+		saida_memoria       : in  std_logic_vector (15 downto 0);   
+		entrada_memoria     : out std_logic_vector (15 downto 0) 
 	);
   end component;
 
@@ -50,12 +49,11 @@ package mito_pkg is
 		data_en             : out std_logic;
 		write_reg_en        : out std_logic;
 		jmp_sel             : out std_logic;
-		out_pc_mux_signal   : out std_logic;
 		alu_mem_sel         : out std_logic;
 		write_mem_en        : out std_logic;
 		decoded_inst        : in  decoded_instruction_type;
 		mem_write_sel       : out std_logic; 
-		alu_op              : out std_logic_vector (5 downto 0);
+		alu_op              : out std_logic_vector (3 downto 0);
 		flag_z              : in  std_logic;
 		alu_a_ind           : out std_logic;
 		flag_n              : in  std_logic
@@ -65,12 +63,12 @@ package mito_pkg is
   component memory is
 		port(        
           clk               : in  std_logic;
-          saida_memoria     : out std_logic_vector (31 downto 0);
-          entrada_memoria   : in  std_logic_vector (31 downto 0);
+          saida_memoria     : out std_logic_vector (15 downto 0);
+          entrada_memoria   : in  std_logic_vector (15 downto 0);
           escrita           : in  std_logic;
-          endereco_memoria  : in  std_logic_vector (8  downto 0);
+          endereco_memoria  : in  std_logic_vector (5  downto 0);
           rst_n             : in  std_logic
-		;
+		);
           
   end component;
 
@@ -78,9 +76,9 @@ package mito_pkg is
   port (
     rst_n        			: in  std_logic;
     clk          			: in  std_logic;
-    adress_pc    			: in  std_logic_vector (8  downto 0);
-    saida_memoria 			: in  std_logic_vector (31 downto 0);  
-    entrada_memoria 		: out std_logic_vector (31 downto 0); 
+    adress_pc    			: in  std_logic_vector (5  downto 0);
+    saida_memoria 			: in  std_logic_vector (15 downto 0);  
+    entrada_memoria 		: out std_logic_vector (15 downto 0); 
     write_enable 			: out std_logic
   );
   end component;
@@ -89,8 +87,8 @@ package mito_pkg is
   port (
        signal clk 				: in  std_logic := '0';
        signal reset 			: in  std_logic;
-       signal saida_memoria 	: in  std_logic_vector (31 downto 0);
-       signal entrada_memoriao 	: out std_logic_vector (31 downto 0)
+       signal saida_memoria 	: in  std_logic_vector (15 downto 0);
+       signal entrada_memoriao 	: out std_logic_vector (15 downto 0)
   ); 
   
   end component;   
