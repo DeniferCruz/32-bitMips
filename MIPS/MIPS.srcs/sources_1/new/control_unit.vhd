@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: UERGS
--- Engineer: Newton Jr
+-- Engineer: Marco Antônio e Denifer
 ----------------------------------------------------------------------------------
 
 
@@ -54,7 +54,7 @@ begin
         
     end process main;
     
-    next_st : process(current,decoded_inst,flag_z,flag_n)
+    next_st : process(nextstate,current,rst_n ,clk)
     begin
     
     jmp_sel <='0';
@@ -64,6 +64,9 @@ begin
     adress_sel <= '0';
     alu_op <="0000";
     write_mem_en <= '0';
+    data_en<='0';
+    alu_mem_sel<='0';
+    
 
     
         case(current) is
@@ -73,19 +76,24 @@ begin
                 
             when decodifica_inst =>            
                 nextstate <= pos_decodifica_inst;
-                pc_en <= '1'; 
+               
             
             when pos_decodifica_inst =>
                 case decoded_inst is
                         
                     when I_LOAD => 
                         
-                        write_reg_en <= '1';
-                        nextstate <= load;  
+                        
+                        nextstate <= load;
+                         data_en <= '1';
+                         alu_mem_sel <= '1'; 
+                         write_reg_en <= '1'; 
+                          
                         
                     when I_STORE =>
      
                         write_mem_en <= '1';
+                        data_en <= '1';
                         nextstate <= store;    
                         
                     when I_ADD =>
@@ -103,50 +111,76 @@ begin
                     when I_JMP =>
      
                         jmp_sel <= '1';
-                        pc_en <= '1';
+                        data_en <= '1';
                         nextstate <= jmp;
                         
                    when I_SUB =>
      
                         alu_op <= "0110";
-                         write_reg_en <= '1';
+                        write_reg_en <= '1';
                         nextstate <= sub;
+                    
                         
                     when I_BNE =>
                         
                         alu_op <= "1100";
-                        nextstate <= bne; 
+                        if(flag_z='0') then
+                                    jmp_sel<='1';
+                                    pc_en<='1';
+                                    nextstate<= bne; 
+                                else
+                                    nextstate<= final; 
+                                end if; 
+                        
                                        
                     when others =>
-                        nextstate <= registra_inst;    
+                        nextstate <= registra_inst; 
+                        write_reg_en <= '0';
+                        write_mem_en <= '0';
+                        pc_en <= '1';
+                      
+                           
                 end case;
          
            
                 when load =>
-                    nextstate <= busca_inst;  
+                    nextstate <= registra_inst;
+                    alu_mem_sel  <= '1'; 
+                    pc_en <= '1';   
                     
                 when store =>
-                    nextstate <= busca_inst;
+                    nextstate <= registra_inst;
+                    pc_en <= '1'; 
                     
-                when add =>
-                    nextstate <= busca_inst;
-                    write_reg_en <= '1';
+                when add =>                
                      pc_en <= '1';
-                when sub =>
-                    nextstate <= busca_inst;
+                     alu_mem_sel <= '1';
+                     nextstate <= registra_inst;
+                     
+                when sub =>                   
+                     pc_en <= '1';
+                     alu_mem_sel <= '1';
+                     nextstate <= registra_inst;
+                     
                     
                 when ore =>
-                    nextstate <= busca_inst;
+                      pc_en <= '1';
+                     alu_mem_sel <= '1';
+                     nextstate <= registra_inst;
+                     
                  
                  when jmp =>
-                    nextstate <= busca_inst;
+                    nextstate <= registra_inst;
                      pc_en <= '1';
                     
                  when bne =>
-                    nextstate <= busca_inst;    
+                     nextstate <= registra_inst;
+                    alu_mem_sel  <= '1'; 
+                    pc_en <= '1';     
                      
                 when final =>
-                    nextstate <= final;
+                    nextstate <= registra_inst;
+                    pc_en <= '1';  
                  
                 when others =>
                     nextstate <= registra_inst;

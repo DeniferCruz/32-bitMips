@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: UERGS
--- Engineer: Newton Jr
+-- Engineer: Marco Antônio e Denifer
 ----------------------------------------------------------------------------------
 
 
@@ -12,83 +12,79 @@ use mito.mito_pkg.all;
 
 entity data_path is
   Port (
-    -- Clock e reset
-    clk                 : in  std_logic;
+    -- PC e Memória--
+    clk                 : in  std_logic; --clk
     rst_n               : in  std_logic;   -- reset
 
-    -- MemÃ³ria
-    saida_memoria       : in  std_logic_vector (15 downto 0);
-    entrada_memoria     : out std_logic_vector (15 downto 0);
-    adress_pc           : out std_logic_vector (5 downto 0);   -- saÃ­da do pc
+    -- Memória--
+    saida_memoria       : in  std_logic_vector (15 downto 0);--saida memoria
+    entrada_memoria     : out std_logic_vector (15 downto 0);--????????????????????????????????????
+    adress_pc           : out std_logic_vector (5 downto 0); -- entrada da memória
 
     -- Controle de seletores
     jmp_sel             : in  std_logic;   -- seletor do jump
-    adress_sel          : in  std_logic;   -- seletor do pc
-    alu_mem_sel         : in  std_logic;   -- seletor do ula
-    mem_write_sel       : in  std_logic;   -- seletor da escrita de memÃ³ria
-    alu_op              : in  std_logic_vector (3 downto 0);    -- seletor da ula
+    adress_sel          : in  std_logic;   -- ??????????????????????????????????????????????????????
+    alu_mem_sel         : in  std_logic;   -- seletor do mux depois da ula
+    mem_write_sel       : in  std_logic;   -- seletor da escrita de memória
+    alu_op              : in  std_logic_vector (3 downto 0); -- seletor de operação da ula
 
     -- Registradores
     pc_en               : in  std_logic;    -- habilita registrador de pc
     ir_en               : in  std_logic;    -- habilita registrador de instruÃ§Ã£o
-    data_en             : in  std_logic;    -- habilita registrador de dados na memÃ³ria 
+    data_en             : in  std_logic;    -- seletor do mux depois do PC
     write_reg_en        : in  std_logic;    -- escrita nos registradores
-    alu_a_ind           : in  std_logic;    -- registrador a
-    alu_b_ind           : in  std_logic;    -- registrador b
-   
+    alu_a_ind           : in std_logic; --??????????????????????????????????????????????????????????
+    alu_b_ind           : in std_logic; --???????????????????????????????????????????????????????????
     
     -- Infos para o controle
-    decoded_inst        : out decoded_instruction_type;
-    flag_z              : out std_logic;
-    flag_n              : out std_logic
+    decoded_inst        : out decoded_instruction_type; --processo
+    flag_z              : out std_logic; --flag para brach
+    flag_n              : out std_logic --flag para branch
 );
 end data_path;
 
 architecture rtl of data_path is
 
     -- sinais que saem de algum lugar
-    signal data                 : std_logic_vector (15 downto 0);
-    signal alu_or_mem_data      : std_logic_vector (15 downto 0);
-    signal instruction          : std_logic_vector (15 downto 0); 
-    signal mem_addr             : std_logic_vector (5  downto 0); 
-    signal program_counter      : std_logic_vector (5  downto 0); 
-    signal out_pc_mux           : std_logic_vector (5  downto 0); 
-    signal b_alu                : std_logic_vector (15 downto 0);
-    signal dr_to_reg            : std_logic_vector (15 downto 0);
-    signal pc_in                : std_logic_vector (5 downto 0);
-    signal pc_out               : std_logic_vector (5 downto 0);
+    signal data                 : std_logic_vector (15 downto 0);--?????????????????????????????????????????????????
+    signal alu_or_mem_data      : std_logic_vector (15 downto 0);--?????????????????????????????????????????????????
+    signal instruction          : std_logic_vector (15 downto 0); -- processo
+    signal mem_addr             : std_logic_vector (5  downto 0);--endereço 
+    signal program_counter      : std_logic_vector (5  downto 0);--?????????????????????????????????????????????? 
+    signal b_alu                : std_logic_vector (15 downto 0);--????????????????????????????????????????????
+    signal pc_out               : std_logic_vector (5 downto 0); --saída do PC
     
     -- banco de registradores
-     signal reg1                : std_logic_vector (15 downto 0);
-     signal reg2                : std_logic_vector (15 downto 0);
-     signal reg3                : std_logic_vector (15 downto 0);
-     signal reg4                : std_logic_vector (15 downto 0);
+     signal reg1                : std_logic_vector (15 downto 0); --r1
+     signal reg2                : std_logic_vector (15 downto 0);--r2
+     signal reg3                : std_logic_vector (15 downto 0); --r3
+     signal reg4                : std_logic_vector (15 downto 0); --r4
     
-     signal reg_inst_mem        : std_logic_vector (14 downto 0); 
-     signal mem_data_reg        : std_logic_vector (15 downto 0);
-     signal reg_a_ula           : std_logic_vector (1 downto 0);   -- entrada do registrador a
-     signal reg_b_ula           : std_logic_vector (1 downto 0);   -- entrada do registrador b
-     signal reg_ula_out         : std_logic_vector (15 downto 0);
+     signal reg_inst_mem        : std_logic_vector (14 downto 0);--???????????????????????????????????????????????????
+     signal mem_data_reg        : std_logic_vector (15 downto 0); --???????????????????????????????????????
+     signal reg_a_ula           : std_logic_vector (1 downto 0);   -- sai da inntruc reg para register
+     signal reg_b_ula           : std_logic_vector (1 downto 0);   -- sai da inntruc reg para register
+     signal reg_ula_out         : std_logic_vector (15 downto 0); --?????????????????????????????????????????????????
      
          
-    -- registrador de destino
-    signal reg_dest     : std_logic_vector(1 downto 0);
+    
+    signal reg_dest     : std_logic_vector(1 downto 0); --sai da inntruc reg para register
     
     -- SaÃ­da dos registradores a e b 
-    signal reg_a_alu_out: std_logic_vector(15 downto 0);  
-    signal reg_b_alu_out: std_logic_vector(15 downto 0);
+    signal reg_a_alu_out: std_logic_vector(15 downto 0); --saida do registrador a da ula 
+    signal reg_b_alu_out: std_logic_vector(15 downto 0); --saida do registrador b da ula
       
    -- ALU signals
-    signal a_operand    : STD_LOGIC_VECTOR (15 downto 0);      
-    signal b_operand    : STD_LOGIC_VECTOR (15 downto 0);   
-    signal ula_out      : STD_LOGIC_VECTOR (15 downto 0);
+    signal a_operand    : STD_LOGIC_VECTOR (15 downto 0); --?????????????????????????????????????     
+    signal b_operand    : STD_LOGIC_VECTOR (15 downto 0);  --????????????????????????????????????????/ 
+    signal ula_out      : STD_LOGIC_VECTOR (15 downto 0); --saída da ula
     
     -- FLAGS
-    signal zero         : std_logic;
-    signal neg          : std_logic;
+    signal zero         : std_logic; --flag zero
+    signal neg          : std_logic; -- flag neg
 
-    signal saida_mux_pc          : STD_LOGIC_VECTOR (5 downto 0);
-    signal saida_mux_register    : STD_LOGIC_VECTOR (15 downto 0);
+    signal saida_mux_pc          : STD_LOGIC_VECTOR (5 downto 0); -- saida do mux para o pc
+    signal saida_mux_register    : STD_LOGIC_VECTOR (15 downto 0); -- saida do mux para o register
       
     begin 
     
@@ -96,15 +92,15 @@ architecture rtl of data_path is
 
     -- mux entrda pc (jump e branch quando 1)
    saida_mux_pc <= saida_memoria(5 downto 0) WHEN jmp_sel= '1' ELSE
-   program_counter + 1; 
+   pc_out +1; 
    
     -- mux entre pc e mem (load e store quando 1)
-   adress_pc <= saida_memoria (5 downto 0) WHEN jmp_sel= '1' ELSE
-    pc_out(5 downto 0);
+    adress_pc <= saida_memoria(5 downto 0) WHEN data_en = '1' ELSE
+    pc_out ;
 
     -- mux entre saida da ula e memória
-    saida_mux_register <= ula_out when alu_mem_sel  = '1' ELSE 
-    alu_or_mem_data; 
+    saida_mux_register <=  saida_memoria when alu_mem_sel  = '1' ELSE 
+    ula_out; 
 
     PC : process (clk)
       begin
@@ -116,6 +112,7 @@ architecture rtl of data_path is
             end if;
            end if;    
          end if;
+  
     end process PC;
 
     FLAGS : process (clk)
@@ -129,16 +126,16 @@ architecture rtl of data_path is
       if (clk'event and clk='1') then
         if (write_reg_en = '1') then
             case reg_dest is
-              when "01" => reg1 <= ula_out;
-              when "10" => reg2 <= ula_out;
-              when "11" => reg3 <= ula_out;
-              when others => reg4 <= ula_out;
+              when "01" => reg1 <= saida_mux_register;
+              when "10" => reg2 <= saida_mux_register;
+              when "11" => reg3 <= saida_mux_register;
+              when others => reg4 <= saida_mux_register;
             
             end case;
         else
           if(rst_n='1') then
             reg1 <= x"0001";
-            reg2 <= x"0010";
+            reg2 <= x"0011";
             reg3 <= x"0000";
             reg4 <= x"0000";                              
           end if;    
@@ -196,6 +193,8 @@ architecture rtl of data_path is
                 when "0100" =>  --LOAD
                                                                          
                          decoded_inst <= I_LOAD;  
+                         reg_dest <= instruction(11 downto 10);
+                        
                                                 
                 when "0111" =>  --STORE
                 

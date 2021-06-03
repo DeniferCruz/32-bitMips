@@ -2,9 +2,9 @@
 2018.3
 Dec  7 2018
 00:33:28
-C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sim_1/new/testebench.vhd,1622606662,vhdl,,,,testebench,,,,,,,,
-C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sources_1/new/control_unit.vhd,1622611071,vhdl,,,,control_unit,,,,,,,,
-C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sources_1/new/data_path.vhd,1622610628,vhdl,,,,data_path,,,,,,,,
-C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sources_1/new/memory.vhd,1622612236,vhdl,,,,memory,,,,,,,,
-C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sources_1/new/miTo.vhd,1622607139,vhdl,,,,mito,,,,,,,,
-C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sources_1/new/mito_pkg.vhd,1622607134,vhdl,C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sources_1/new/memory.vhd,,,mito_pkg,,,,,,,,
+C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sim_1/new/testebench.vhd,1622615592,vhdl,,,,testebench,,,,,,,,
+C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sources_1/new/control_unit.vhd,1622694736,vhdl,,,,control_unit,,,,,,,,
+C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sources_1/new/data_path.vhd,1622694165,vhdl,,,,data_path,,,,,,,,
+C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sources_1/new/memory.vhd,1622694798,vhdl,,,,memory,,,,,,,,
+C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sources_1/new/miTo.vhd,1622661048,vhdl,,,,mito,,,,,,,,
+C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sources_1/new/mito_pkg.vhd,1622659173,vhdl,C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sources_1/new/control_unit.vhd;C:/Users/denif/32-bitMips/MIPS/MIPS.srcs/sources_1/new/memory.vhd,,,mito_pkg,,,,,,,,

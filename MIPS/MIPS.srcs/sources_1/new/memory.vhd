@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: UERGS
--- Engineer: Newton Jr
+-- Engineer: Marco Antônio e Denifer
 ----------------------------------------------------------------------------------
 
 
@@ -19,7 +19,7 @@ entity memory is
 
 		-- Datapath        
         entrada_memoria     : in  std_logic_vector(15 downto 0);
-        endereco_memoria    : in  std_logic_vector(5  downto 0);
+        adress_pc    : in  std_logic_vector(5  downto 0);
         saida_memoria       : out std_logic_vector(15 downto 0)
     );
         
@@ -40,10 +40,10 @@ begin
 	if(rst_n = '1') then
 			--  reset memory when rst_n = 1 
 			 
-			mem(0)    <= "0110100111000000"; 
-			mem(1)    <= "0000000000000000";
-			mem(2)    <= "0000000000000000";
-			mem(3)    <= "0000000000000000";
+			mem(0)    <= "0100010000111110"; --lw r1 62
+			mem(1)    <= "0100100000111101"; --lw r2 61
+			mem(2)    <= "0001011011000000"; --add r1 + r2
+			mem(3)    <= "0111110000111111";
 			mem(4)    <= "0000000000000000";
 			mem(5)    <= "0000000000000000"; 
 			mem(6)    <= "0000000000000000";
@@ -101,17 +101,17 @@ begin
 			mem(58)   <= "0000000000000000";
 			mem(59)   <= "0000000000000000";
 			mem(60)   <= "0000000000000000";
-			mem(61)   <= "0000000000000000";
-			mem(62)   <= "0000000000000000";
+			mem(61)   <= "0000000000000111";
+			mem(62)   <= "0000000000000011";
 			mem(63)   <= "0000000000000000";
 			
 	else
 	    -- read from memory
 		if((escrita = '0'))then 
-				saida_memoria(15 downto 0) <= mem(to_integer(unsigned(endereco_memoria)));
+				saida_memoria(15 downto 0) <= mem(to_integer(unsigned( adress_pc)));
 		-- write in memory		
 		elsif ((escrita = '1')) then 		
-			mem(to_integer(unsigned(endereco_memoria))) <= entrada_memoria(15 downto 0);
+			mem(to_integer(unsigned( adress_pc))) <= entrada_memoria(15 downto 0);
 		end if;
 	end if;		
 

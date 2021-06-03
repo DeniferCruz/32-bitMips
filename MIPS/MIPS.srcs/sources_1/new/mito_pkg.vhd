@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: UERGS
--- Engineer: Newton Jr
+-- Engineer: Marco Antônio e Denifer
 ----------------------------------------------------------------------------------
 
 
@@ -66,7 +66,7 @@ package mito_pkg is
           saida_memoria     : out std_logic_vector (15 downto 0);
           entrada_memoria   : in  std_logic_vector (15 downto 0);
           escrita           : in  std_logic;
-          endereco_memoria  : in  std_logic_vector (5  downto 0);
+          adress_pc        : in  std_logic_vector (5  downto 0);
           rst_n             : in  std_logic
 		);
           

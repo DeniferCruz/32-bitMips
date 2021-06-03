@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 -- Company: UERGS
--- Engineer: Newton Jr
+-- Engineer: Marco Antônio e Denifer
 ----------------------------------------------------------------------------------
 
 
@@ -91,7 +91,7 @@ memory_i : memory
   port map(
     clk                 => clk,
     rst_n               => rst_n,    
-    endereco_memoria    => adress_pc_s,
+    adress_pc    => adress_pc_s,
     escrita             => write_mem_en_s,
     saida_memoria       => saida_memoria_s,
     entrada_memoria     => entrada_memoria_s
