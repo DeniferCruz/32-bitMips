@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="127489000fs"></ZoomStartTime>
-      <ZoomEndTime time="291889001fs"></ZoomEndTime>
-      <Cursor1Time time="148689000fs"></Cursor1Time>
+      <ZoomStartTime time="120000000fs"></ZoomStartTime>
+      <ZoomEndTime time="161997172fs"></ZoomEndTime>
+      <Cursor1Time time="185000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="162"></NameColumnWidth>
+      <NameColumnWidth column_width="150"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="26" />
+   <WVObjectSize size="29" />
    <wvobject fp_name="/testebench/clk_s" type="logic">
       <obj_property name="ElementShortName">clk_s</obj_property>
       <obj_property name="ObjectShortName">clk_s</obj_property>
@@ -123,6 +123,17 @@
    <wvobject fp_name="/testebench/miTo_i/memory_i/mem" type="array">
       <obj_property name="ElementShortName">mem[0:63][15:0]</obj_property>
       <obj_property name="ObjectShortName">mem[0:63][15:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject fp_name="/testebench/miTo_i/data_path_i/jmp_sel" type="logic">
+      <obj_property name="ElementShortName">jmp_sel</obj_property>
+      <obj_property name="ObjectShortName">jmp_sel</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testebench/miTo_i/data_path_i/saida_mux_pc" type="array">
+      <obj_property name="ElementShortName">saida_mux_pc[5:0]</obj_property>
+      <obj_property name="ObjectShortName">saida_mux_pc[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testebench/miTo_i/data_path_i/flag_z" type="logic">
+      <obj_property name="ElementShortName">flag_z</obj_property>
+      <obj_property name="ObjectShortName">flag_z</obj_property>
    </wvobject>
 </wave_config>

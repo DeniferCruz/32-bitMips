@@ -4,4 +4,19 @@ Running: C:/Xilinx/Vivado/2018.3/bin/unwrapped/win64.o/xelab.exe -wto 0a049ef2e9
 Using 2 slave threads.
 Starting static elaboration
 Completed static elaboration
-INFO: [XSIM 43-4323] No Change in HDL. Linking previously generated obj files to create kernel
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package std.standard
+Compiling package std.textio
+Compiling package ieee.std_logic_1164
+Compiling package ieee.std_logic_arith
+Compiling package ieee.std_logic_unsigned
+Compiling package mito.mito_pkg
+Compiling package ieee.numeric_std
+Compiling architecture rtl of entity mito.control_unit [control_unit_default]
+Compiling architecture rtl of entity mito.data_path [data_path_default]
+Compiling architecture rtl of entity mito.memory [memory_default]
+Compiling architecture rtl of entity mito.miTo [mito_default]
+Compiling architecture behavioral of entity mito.testebench
+Built simulation snapshot testebench_behav

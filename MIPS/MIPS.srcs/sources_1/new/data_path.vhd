@@ -115,11 +115,11 @@ architecture rtl of data_path is
   
     end process PC;
 
-    FLAGS : process (clk)
-    begin
-          flag_z <= zero;
-          flag_n <= neg;
-    end process FLAGS;
+    --FLAGS : process (clk)
+    --begin
+         -- flag_z <= zero;
+          --flag_n <= neg;
+   -- end process FLAGS;
 
     reg_bank : process(clk)  
     begin
@@ -134,8 +134,8 @@ architecture rtl of data_path is
             end case;
         else
           if(rst_n='1') then
-            reg1 <= x"0001";
-            reg2 <= x"0011";
+            reg1 <= x"0001";--hexadecimal "1"
+            reg2 <= x"0011";--hexadecimal "17"
             reg3 <= x"0000";
             reg4 <= x"0000";                              
           end if;    
@@ -150,10 +150,18 @@ architecture rtl of data_path is
       when "0001" => ula_out <= reg_a_alu_out +  reg_b_alu_out;
       when "0010" => ula_out <= reg_a_alu_out OR reg_b_alu_out;
       when "0110" => ula_out <= reg_a_alu_out - reg_b_alu_out;
+      when "1100" => ula_out <= reg_a_alu_out - reg_b_alu_out;
       
+        
       when others => ula_out <= reg_a_alu_out NAND reg_b_alu_out;
       end case;
-
+      
+      if(ula_out=0)then
+            flag_z<= '1';
+      else
+            flag_z<= '0';
+      end if;       
+        
     end process ULA;
     
     IR : process (clk)
@@ -204,8 +212,8 @@ architecture rtl of data_path is
                 
                 when "1000" => -- JUMP
                 
-                        decoded_inst <= I_JMP;  
-                                        
+                        decoded_inst <= I_JMP; 
+                                                               
                 when "1100" => -- BNE      
                         reg_a_ula <= instruction(11 downto 10);
                         reg_b_ula <= instruction(9 downto 8);                        

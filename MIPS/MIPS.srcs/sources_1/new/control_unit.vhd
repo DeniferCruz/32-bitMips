@@ -109,10 +109,12 @@ begin
                         nextstate <= ore; 
                         
                     when I_JMP =>
-     
-                        jmp_sel <= '1';
-                        data_en <= '1';
+                        
+                        data_en <= '0';
+                        jmp_sel<='1';
                         nextstate <= jmp;
+                
+                        
                         
                    when I_SUB =>
      
@@ -124,13 +126,7 @@ begin
                     when I_BNE =>
                         
                         alu_op <= "1100";
-                        if(flag_z='0') then
-                                    jmp_sel<='1';
-                                    pc_en<='1';
-                                    nextstate<= bne; 
-                                else
-                                    nextstate<= final; 
-                                end if; 
+                        nextstate <= bne;
                         
                                        
                     when others =>
@@ -172,15 +168,26 @@ begin
                  when jmp =>
                     nextstate <= registra_inst;
                      pc_en <= '1';
+                     data_en <= '0';
+                     jmp_sel<='1';
+                     ir_en <= '1';
+                  
                     
                  when bne =>
                      nextstate <= registra_inst;
-                    alu_mem_sel  <= '1'; 
-                    pc_en <= '1';     
-                     
+                     if(flag_z='0') then         --verificando se não são iguais   
+                                    data_en<='0';
+                                    jmp_sel<='1';
+                                    nextstate<= registra_inst; 
+                                else
+                                    nextstate<= final; 
+                                end if;     
+                      pc_en <= '1';
+                      ir_en <= '1'; 
+                      
                 when final =>
                     nextstate <= registra_inst;
-                    pc_en <= '1';  
+                   pc_en <= '1';  
                  
                 when others =>
                     nextstate <= registra_inst;
