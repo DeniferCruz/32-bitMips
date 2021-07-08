@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="167600001fs"></ZoomEndTime>
-      <Cursor1Time time="265000000fs"></Cursor1Time>
+      <ZoomStartTime time="128204334fs"></ZoomStartTime>
+      <ZoomEndTime time="386204335fs"></ZoomEndTime>
+      <Cursor1Time time="195000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="146"></NameColumnWidth>
+      <NameColumnWidth column_width="130"></NameColumnWidth>
       <ValueColumnWidth column_width="58"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="12" />
+   <WVObjectSize size="20" />
    <wvobject fp_name="/testebench/miTo_i/data_path_i/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -67,5 +67,37 @@
    <wvobject fp_name="/testebench/miTo_i/memory_i/mem[63]" type="array">
       <obj_property name="ElementShortName">[63][15:0]</obj_property>
       <obj_property name="ObjectShortName">[63][15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testebench/miTo_i/data_path_i/adress_pc" type="array">
+      <obj_property name="ElementShortName">adress_pc[5:0]</obj_property>
+      <obj_property name="ObjectShortName">adress_pc[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testebench/miTo_i/data_path_i/ula_out" type="array">
+      <obj_property name="ElementShortName">ula_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">ula_out[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testebench/miTo_i/data_path_i/reg_a_ula" type="array">
+      <obj_property name="ElementShortName">reg_a_ula[1:0]</obj_property>
+      <obj_property name="ObjectShortName">reg_a_ula[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testebench/miTo_i/data_path_i/reg_b_ula" type="array">
+      <obj_property name="ElementShortName">reg_b_ula[1:0]</obj_property>
+      <obj_property name="ObjectShortName">reg_b_ula[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testebench/miTo_i/data_path_i/reg_a_alu_out" type="array">
+      <obj_property name="ElementShortName">reg_a_alu_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">reg_a_alu_out[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testebench/miTo_i/data_path_i/reg_b_alu_out" type="array">
+      <obj_property name="ElementShortName">reg_b_alu_out[15:0]</obj_property>
+      <obj_property name="ObjectShortName">reg_b_alu_out[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testebench/miTo_i/data_path_i/entrada_memoria" type="array">
+      <obj_property name="ElementShortName">entrada_memoria[15:0]</obj_property>
+      <obj_property name="ObjectShortName">entrada_memoria[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/testebench/miTo_i/data_path_i/pc_out" type="array">
+      <obj_property name="ElementShortName">pc_out[5:0]</obj_property>
+      <obj_property name="ObjectShortName">pc_out[5:0]</obj_property>
    </wvobject>
 </wave_config>

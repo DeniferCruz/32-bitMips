@@ -101,6 +101,10 @@ architecture rtl of data_path is
     -- mux entre saida da ula e memória
     saida_mux_register <=  saida_memoria when alu_mem_sel  = '1' ELSE 
     ula_out; 
+    
+    -- mux entre saida da ula  e memória
+    entrada_memoria<=  ula_out when adress_sel  = '1' ELSE 
+    reg_b_alu_out; 
 
     PC : process (clk)
       begin
@@ -137,7 +141,7 @@ architecture rtl of data_path is
       end if;
     end process reg_bank;
 
-    ULA : process (reg_a_alu_out, reg_b_alu_out, alu_op)
+    ULA : process (reg_a_alu_out, reg_b_alu_out, alu_op, instruction)
     begin
       case alu_op is 
 
@@ -145,6 +149,7 @@ architecture rtl of data_path is
       when "0010" => ula_out <= reg_a_alu_out OR reg_b_alu_out;
       when "0110" => ula_out <= reg_a_alu_out - reg_b_alu_out;
       when "1100" => ula_out <= reg_a_alu_out - reg_b_alu_out;
+      when "0011" => ula_out <= reg_a_alu_out + instruction(9 downto 8);
       
         
       when others => ula_out <= reg_a_alu_out NAND reg_b_alu_out;
@@ -179,6 +184,12 @@ architecture rtl of data_path is
                         decoded_inst <= I_ADD;
                         reg_a_ula <= instruction(11 downto 10);
                         reg_b_ula <= instruction(9 downto 8);
+                        reg_dest <= instruction(7 downto 6); 
+                         
+                when "0011" =>  --ADDI
+                        
+                        decoded_inst <= I_ADDI;
+                        reg_a_ula <= instruction(11 downto 10);
                         reg_dest <= instruction(7 downto 6);                 
                                                 
                 when "0110" =>  --SUB
@@ -202,7 +213,13 @@ architecture rtl of data_path is
                 
                         decoded_inst <= I_STORE;
                         reg_b_ula <= instruction(9 downto 8); -- recebe o reg q o dado a ser enviado está (pq é o q sai pra mem)
-                        entrada_memoria <= reg_b_alu_out;
+                        --entrada_memoria <= reg_b_alu_out;
+                        
+                when "1111" =>  --ADDSTORE
+                
+                       decoded_inst <= I_ADDSTORE;
+                       reg_a_ula <= instruction (11 downto 10); -- recebe o reg q o dado a ser enviado está (pq é o q sai pra mem)      
+                       --entrada_memoria <= ula_out;
                 
                 when "1000" => -- JUMP
                 

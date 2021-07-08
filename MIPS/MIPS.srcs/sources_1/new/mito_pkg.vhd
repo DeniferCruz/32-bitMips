@@ -12,7 +12,7 @@ use IEEE.STD_LOGIC_UNSIGNED.all;
 
 package mito_pkg is
                                                                                                                                                             --NOVAS
-  type decoded_instruction_type is (I_LOAD, I_LOADI, I_STORE, I_ADD, I_SUB, I_AND, I_OR, I_ADDI, I_SUBI, I_MOV, I_MULI, I_JMP, I_BEQ, I_BNE, I_HALT, I_NOP, I_ADDSTORE, I_ADDLOAD, I_SUBSTORE, I_SUBLOAD, I_LUILW, I_LIS, I_LDS, I_MULT);
+  type decoded_instruction_type is ( I_LOAD, I_LOADI, I_STORE, I_ADD, I_SUB, I_AND, I_OR, I_ADDI, I_SUBI, I_MOV, I_MULI, I_JMP, I_BEQ, I_BNE, I_HALT, I_NOP, I_ADDSTORE, I_ADDLOAD, I_SUBSTORE, I_SUBLOAD, I_LUILW, I_LIS, I_LDS, I_MULT);
   
   component data_path
 	Port (

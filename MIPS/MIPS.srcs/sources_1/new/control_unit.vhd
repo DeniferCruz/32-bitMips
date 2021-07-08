@@ -36,7 +36,7 @@ end control_unit;
 
 architecture rtl of control_unit is
      
-type state_type is(busca_inst, registra_inst, decodifica_inst, pos_decodifica_inst, load, store, bne, add, ore , jmp, sub, final, aux);
+type state_type is(busca_inst, registra_inst, decodifica_inst, pos_decodifica_inst, load, addstore, store, bne, addi, add, ore , jmp, sub, final, aux);
         
         signal current : state_type;
         signal nextstate : state_type;
@@ -94,13 +94,27 @@ begin
      
                         write_mem_en <= '1';
                         data_en <= '1';
-                        nextstate <= store;    
+                        nextstate <= store; 
+                        
+                     when I_ADDSTORE =>
+                        
+                        alu_op <= "0011";
+                        adress_sel  <='1';
+                        write_mem_en <= '1';
+                        data_en <= '1'; 
+                        nextstate <= addstore;    
                         
                     when I_ADD =>
      
                         alu_op <= "0001";
                         write_reg_en <= '1';
                         nextstate <= add; 
+                        
+                      when I_ADDI =>
+     
+                        alu_op <= "0011";
+                        write_reg_en <= '1';
+                        nextstate <= addi; 
                            
                     when I_OR =>
      
@@ -146,9 +160,19 @@ begin
                     
                 when store =>
                     nextstate <= registra_inst;
-                    pc_en <= '1'; 
+                    pc_en <= '1';
+                     
+                when addstore => 
+                    pc_en <= '1';
+                    alu_mem_sel  <= '1'; 
+                    nextstate <= registra_inst;
                     
                 when add =>                
+                     pc_en <= '1';
+                     alu_mem_sel <= '1';
+                     nextstate <= registra_inst;
+                     
+                 when addi =>                
                      pc_en <= '1';
                      alu_mem_sel <= '1';
                      nextstate <= registra_inst;
