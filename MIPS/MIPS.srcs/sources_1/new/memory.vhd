@@ -41,7 +41,7 @@ begin
 			--  reset memory when rst_n = 1 
 			 
 			mem(0)    <= "1111101000111111"; --lw r1 62
-			mem(1)    <= "0000000000000000"; --lw r2 61
+			mem(1)    <= "0011010101000000"; --lw r2 61
 			mem(2)    <= "0000000000000000"; --add r1 + r2= r3
 			mem(3)    <= "0000000000000000"; --store r2 na posição 63 da memoria
 			mem(4)    <= "0000000000000000"; --addstore
